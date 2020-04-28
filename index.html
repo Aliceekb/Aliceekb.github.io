@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <style>
+        #map {
+            width: 862px;
+            height: 540px;
+        }
+        </style>
+        <title>Centres hospitaliers en Ile-De-France</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/DEPARTEMENT_1.js"></script>
+        <script src="data/covid_2.js"></script>
+        <script src="data/Htelhospitalierpasdelitsdera_3.js"></script>
+        <script src="data/MCOSSRsanslitsdera_4.js"></script>
+        <script src="data/MCOSSRaveclitsdera_5.js"></script>
+        <script src="data/SSRpasdelitsdera_6.js"></script>
+        <script src="data/MCOsanslitsdera_7.js"></script>
+        <script src="data/MCOaveclitsdera_8.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[48.56839325391977,1.8055381298784228],[49.084199515213825,3.046131991386131]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        var layer_OSMStandard_0 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            opacity: 1.0,
+            attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OSMStandard_0;
+        map.addLayer(layer_OSMStandard_0);
+        function pop_DEPARTEMENT_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(feature.properties['OBJECTID'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['N_SQ_DE'] !== null ? Autolinker.link(feature.properties['N_SQ_DE'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['C_DEP'] !== null ? Autolinker.link(feature.properties['C_DEP'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['L_DEP'] !== null ? Autolinker.link(feature.properties['L_DEP'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Leng'] !== null ? Autolinker.link(feature.properties['SHAPE_Leng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['SHAPE_Area'] !== null ? Autolinker.link(feature.properties['SHAPE_Area'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_DEPARTEMENT_1_0() {
+            return {
+                pane: 'pane_DEPARTEMENT_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(133,182,111,0.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_DEPARTEMENT_1');
+        map.getPane('pane_DEPARTEMENT_1').style.zIndex = 401;
+        map.getPane('pane_DEPARTEMENT_1').style['mix-blend-mode'] = 'normal';
+        var layer_DEPARTEMENT_1 = new L.geoJson(json_DEPARTEMENT_1, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_DEPARTEMENT_1',
+            layerName: 'layer_DEPARTEMENT_1',
+            pane: 'pane_DEPARTEMENT_1',
+            onEachFeature: pop_DEPARTEMENT_1,
+            style: style_DEPARTEMENT_1_0,
+        });
+        bounds_group.addLayer(layer_DEPARTEMENT_1);
+        map.addLayer(layer_DEPARTEMENT_1);
+        function pop_covid_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['finess_et'] !== null ? Autolinker.link(feature.properties['finess_et'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['finess_ej'] !== null ? Autolinker.link(feature.properties['finess_ej'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['raison_soc'] !== null ? Autolinker.link(feature.properties['raison_soc'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['raison_s_1'] !== null ? Autolinker.link(feature.properties['raison_s_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['adresse_ad'] !== null ? Autolinker.link(feature.properties['adresse_ad'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['adresse__1'] !== null ? Autolinker.link(feature.properties['adresse__1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['num_voie'] !== null ? Autolinker.link(feature.properties['num_voie'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['cpt_num'] !== null ? Autolinker.link(feature.properties['cpt_num'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['type_voie'] !== null ? Autolinker.link(feature.properties['type_voie'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['voie'] !== null ? Autolinker.link(feature.properties['voie'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['adresse_co'] !== null ? Autolinker.link(feature.properties['adresse_co'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['complement'] !== null ? Autolinker.link(feature.properties['complement'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['num_dept'] !== null ? Autolinker.link(feature.properties['num_dept'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['dept'] !== null ? Autolinker.link(feature.properties['dept'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['cp_ville'] !== null ? Autolinker.link(feature.properties['cp_ville'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['num_tel'] !== null ? Autolinker.link(feature.properties['num_tel'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['num_fax'] !== null ? Autolinker.link(feature.properties['num_fax'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['num_cat'] !== null ? Autolinker.link(feature.properties['num_cat'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['categorie_'] !== null ? Autolinker.link(feature.properties['categorie_'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['num_type'] !== null ? Autolinker.link(feature.properties['num_type'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['type_etabl'] !== null ? Autolinker.link(feature.properties['type_etabl'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['num_siret'] !== null ? Autolinker.link(feature.properties['num_siret'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['code_ape'] !== null ? Autolinker.link(feature.properties['code_ape'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['code_tarif'] !== null ? Autolinker.link(feature.properties['code_tarif'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lib_tarifi'] !== null ? Autolinker.link(feature.properties['lib_tarifi'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['code_psph'] !== null ? Autolinker.link(feature.properties['code_psph'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['participan'] !== null ? Autolinker.link(feature.properties['participan'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['date_ouver'] !== null ? Autolinker.link(feature.properties['date_ouver'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lat'] !== null ? Autolinker.link(feature.properties['lat'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['lng'] !== null ? Autolinker.link(feature.properties['lng'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtableau'] !== null ? Autolinker.link(feature.properties['nvtableau'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_1'] !== null ? Autolinker.link(feature.properties['nvtablea_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_2'] !== null ? Autolinker.link(feature.properties['nvtablea_2'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_3'] !== null ? Autolinker.link(feature.properties['nvtablea_3'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_4'] !== null ? Autolinker.link(feature.properties['nvtablea_4'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_5'] !== null ? Autolinker.link(feature.properties['nvtablea_5'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_6'] !== null ? Autolinker.link(feature.properties['nvtablea_6'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_7'] !== null ? Autolinker.link(feature.properties['nvtablea_7'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_8'] !== null ? Autolinker.link(feature.properties['nvtablea_8'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_9'] !== null ? Autolinker.link(feature.properties['nvtablea_9'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea10'] !== null ? Autolinker.link(feature.properties['nvtablea10'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea11'] !== null ? Autolinker.link(feature.properties['nvtablea11'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea12'] !== null ? Autolinker.link(feature.properties['nvtablea12'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea13'] !== null ? Autolinker.link(feature.properties['nvtablea13'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea14'] !== null ? Autolinker.link(feature.properties['nvtablea14'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea15'] !== null ? Autolinker.link(feature.properties['nvtablea15'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea16'] !== null ? Autolinker.link(feature.properties['nvtablea16'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_covid_2_0() {
+            return {
+                pane: 'pane_covid_2',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,182,54,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_covid_2');
+        map.getPane('pane_covid_2').style.zIndex = 402;
+        map.getPane('pane_covid_2').style['mix-blend-mode'] = 'normal';
+        var layer_covid_2 = new L.geoJson(json_covid_2, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_covid_2',
+            layerName: 'layer_covid_2',
+            pane: 'pane_covid_2',
+            onEachFeature: pop_covid_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_covid_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_covid_2);
+        function pop_Htelhospitalierpasdelitsdera_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Groupe hospitalier</th>\
+                        <td>' + (feature.properties['nvtablea_1'] !== null ? Autolinker.link(feature.properties['nvtablea_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_2'] !== null ? Autolinker.link(feature.properties['nvtablea_2'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Spécialité</th>\
+                        <td>' + (feature.properties['nvtablea_3'] !== null ? Autolinker.link(feature.properties['nvtablea_3'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Transferts sortants réalisés</th>\
+                        <td>' + (feature.properties['nvtablea_4'] !== null ? Autolinker.link(feature.properties['nvtablea_4'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_6'] !== null ? Autolinker.link(feature.properties['nvtablea_6'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact admin</th>\
+                        <td>' + (feature.properties['nvtablea_9'] !== null ? Autolinker.link(feature.properties['nvtablea_9'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num admin</th>\
+                        <td>' + (feature.properties['nvtablea10'] !== null ? Autolinker.link(feature.properties['nvtablea10'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax admin</th>\
+                        <td>' + (feature.properties['nvtablea11'] !== null ? Autolinker.link(feature.properties['nvtablea11'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact médecin</th>\
+                        <td>' + (feature.properties['nvtablea12'] !== null ? Autolinker.link(feature.properties['nvtablea12'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num médecin</th>\
+                        <td>' + (feature.properties['nvtablea13'] !== null ? Autolinker.link(feature.properties['nvtablea13'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax médecin</th>\
+                        <td>' + (feature.properties['nvtablea14'] !== null ? Autolinker.link(feature.properties['nvtablea14'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Htelhospitalierpasdelitsdera_3_0() {
+            return {
+                pane: 'pane_Htelhospitalierpasdelitsdera_3',
+                radius: 3.999999999999997,
+                opacity: 1,
+                color: 'rgba(117,58,128,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(149,74,162,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Htelhospitalierpasdelitsdera_3');
+        map.getPane('pane_Htelhospitalierpasdelitsdera_3').style.zIndex = 403;
+        map.getPane('pane_Htelhospitalierpasdelitsdera_3').style['mix-blend-mode'] = 'normal';
+        var layer_Htelhospitalierpasdelitsdera_3 = new L.geoJson(json_Htelhospitalierpasdelitsdera_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Htelhospitalierpasdelitsdera_3',
+            layerName: 'layer_Htelhospitalierpasdelitsdera_3',
+            pane: 'pane_Htelhospitalierpasdelitsdera_3',
+            onEachFeature: pop_Htelhospitalierpasdelitsdera_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Htelhospitalierpasdelitsdera_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_Htelhospitalierpasdelitsdera_3);
+        map.addLayer(layer_Htelhospitalierpasdelitsdera_3);
+        function pop_MCOSSRsanslitsdera_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Groupe hospitalier</th>\
+                        <td>' + (feature.properties['nvtablea_1'] !== null ? Autolinker.link(feature.properties['nvtablea_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_2'] !== null ? Autolinker.link(feature.properties['nvtablea_2'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Spécialité</th>\
+                        <td>' + (feature.properties['nvtablea_3'] !== null ? Autolinker.link(feature.properties['nvtablea_3'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Transferts sortants réalisés</th>\
+                        <td>' + (feature.properties['nvtablea_4'] !== null ? Autolinker.link(feature.properties['nvtablea_4'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_6'] !== null ? Autolinker.link(feature.properties['nvtablea_6'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact admin</th>\
+                        <td>' + (feature.properties['nvtablea_9'] !== null ? Autolinker.link(feature.properties['nvtablea_9'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num admin</th>\
+                        <td>' + (feature.properties['nvtablea10'] !== null ? Autolinker.link(feature.properties['nvtablea10'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax admin</th>\
+                        <td>' + (feature.properties['nvtablea11'] !== null ? Autolinker.link(feature.properties['nvtablea11'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact médecin</th>\
+                        <td>' + (feature.properties['nvtablea12'] !== null ? Autolinker.link(feature.properties['nvtablea12'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num médecin</th>\
+                        <td>' + (feature.properties['nvtablea13'] !== null ? Autolinker.link(feature.properties['nvtablea13'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax admin</th>\
+                        <td>' + (feature.properties['nvtablea14'] !== null ? Autolinker.link(feature.properties['nvtablea14'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MCOSSRsanslitsdera_4_0() {
+            return {
+                pane: 'pane_MCOSSRsanslitsdera_4',
+                radius: 3.999999999999997,
+                opacity: 1,
+                color: 'rgba(61,128,53,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(84,176,74,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MCOSSRsanslitsdera_4');
+        map.getPane('pane_MCOSSRsanslitsdera_4').style.zIndex = 404;
+        map.getPane('pane_MCOSSRsanslitsdera_4').style['mix-blend-mode'] = 'normal';
+        var layer_MCOSSRsanslitsdera_4 = new L.geoJson(json_MCOSSRsanslitsdera_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MCOSSRsanslitsdera_4',
+            layerName: 'layer_MCOSSRsanslitsdera_4',
+            pane: 'pane_MCOSSRsanslitsdera_4',
+            onEachFeature: pop_MCOSSRsanslitsdera_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_MCOSSRsanslitsdera_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_MCOSSRsanslitsdera_4);
+        map.addLayer(layer_MCOSSRsanslitsdera_4);
+        function pop_MCOSSRaveclitsdera_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Groupe hospitalier</th>\
+                        <td>' + (feature.properties['nvtablea_1'] !== null ? Autolinker.link(feature.properties['nvtablea_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_2'] !== null ? Autolinker.link(feature.properties['nvtablea_2'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Spécialité</th>\
+                        <td>' + (feature.properties['nvtablea_3'] !== null ? Autolinker.link(feature.properties['nvtablea_3'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Transferts sortants réalisés</th>\
+                        <td>' + (feature.properties['nvtablea_4'] !== null ? Autolinker.link(feature.properties['nvtablea_4'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_6'] !== null ? Autolinker.link(feature.properties['nvtablea_6'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact admin</th>\
+                        <td>' + (feature.properties['nvtablea_9'] !== null ? Autolinker.link(feature.properties['nvtablea_9'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num admin</th>\
+                        <td>' + (feature.properties['nvtablea10'] !== null ? Autolinker.link(feature.properties['nvtablea10'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax admin</th>\
+                        <td>' + (feature.properties['nvtablea11'] !== null ? Autolinker.link(feature.properties['nvtablea11'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact médecin</th>\
+                        <td>' + (feature.properties['nvtablea12'] !== null ? Autolinker.link(feature.properties['nvtablea12'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num médecin</th>\
+                        <td>' + (feature.properties['nvtablea13'] !== null ? Autolinker.link(feature.properties['nvtablea13'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax médecin</th>\
+                        <td>' + (feature.properties['nvtablea14'] !== null ? Autolinker.link(feature.properties['nvtablea14'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MCOSSRaveclitsdera_5_0() {
+            return {
+                pane: 'pane_MCOSSRaveclitsdera_5',
+                shape: 'diamond',
+                radius: 5.999999999999998,
+                opacity: 1,
+                color: 'rgba(61,128,53,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(84,176,74,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MCOSSRaveclitsdera_5');
+        map.getPane('pane_MCOSSRaveclitsdera_5').style.zIndex = 405;
+        map.getPane('pane_MCOSSRaveclitsdera_5').style['mix-blend-mode'] = 'normal';
+        var layer_MCOSSRaveclitsdera_5 = new L.geoJson(json_MCOSSRaveclitsdera_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MCOSSRaveclitsdera_5',
+            layerName: 'layer_MCOSSRaveclitsdera_5',
+            pane: 'pane_MCOSSRaveclitsdera_5',
+            onEachFeature: pop_MCOSSRaveclitsdera_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_MCOSSRaveclitsdera_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_MCOSSRaveclitsdera_5);
+        map.addLayer(layer_MCOSSRaveclitsdera_5);
+        function pop_SSRpasdelitsdera_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Groupe hospitalier</th>\
+                        <td>' + (feature.properties['nvtablea_1'] !== null ? Autolinker.link(feature.properties['nvtablea_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_2'] !== null ? Autolinker.link(feature.properties['nvtablea_2'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Spécialité</th>\
+                        <td>' + (feature.properties['nvtablea_3'] !== null ? Autolinker.link(feature.properties['nvtablea_3'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Transferts sortants réalisés</th>\
+                        <td>' + (feature.properties['nvtablea_4'] !== null ? Autolinker.link(feature.properties['nvtablea_4'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_6'] !== null ? Autolinker.link(feature.properties['nvtablea_6'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact admin</th>\
+                        <td>' + (feature.properties['nvtablea_9'] !== null ? Autolinker.link(feature.properties['nvtablea_9'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num admin</th>\
+                        <td>' + (feature.properties['nvtablea10'] !== null ? Autolinker.link(feature.properties['nvtablea10'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax amdin</th>\
+                        <td>' + (feature.properties['nvtablea11'] !== null ? Autolinker.link(feature.properties['nvtablea11'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact médecin</th>\
+                        <td>' + (feature.properties['nvtablea12'] !== null ? Autolinker.link(feature.properties['nvtablea12'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num médecin</th>\
+                        <td>' + (feature.properties['nvtablea13'] !== null ? Autolinker.link(feature.properties['nvtablea13'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax médecin</th>\
+                        <td>' + (feature.properties['nvtablea14'] !== null ? Autolinker.link(feature.properties['nvtablea14'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_SSRpasdelitsdera_6_0() {
+            return {
+                pane: 'pane_SSRpasdelitsdera_6',
+                radius: 3.999999999999997,
+                opacity: 1,
+                color: 'rgba(50,87,128,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(72,123,182,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_SSRpasdelitsdera_6');
+        map.getPane('pane_SSRpasdelitsdera_6').style.zIndex = 406;
+        map.getPane('pane_SSRpasdelitsdera_6').style['mix-blend-mode'] = 'normal';
+        var layer_SSRpasdelitsdera_6 = new L.geoJson(json_SSRpasdelitsdera_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_SSRpasdelitsdera_6',
+            layerName: 'layer_SSRpasdelitsdera_6',
+            pane: 'pane_SSRpasdelitsdera_6',
+            onEachFeature: pop_SSRpasdelitsdera_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_SSRpasdelitsdera_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_SSRpasdelitsdera_6);
+        map.addLayer(layer_SSRpasdelitsdera_6);
+        function pop_MCOsanslitsdera_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Groupe hospitalier</th>\
+                        <td>' + (feature.properties['nvtablea_1'] !== null ? Autolinker.link(feature.properties['nvtablea_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_2'] !== null ? Autolinker.link(feature.properties['nvtablea_2'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Spécialité</th>\
+                        <td>' + (feature.properties['nvtablea_3'] !== null ? Autolinker.link(feature.properties['nvtablea_3'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Transferts sortants réalisés</th>\
+                        <td>' + (feature.properties['nvtablea_4'] !== null ? Autolinker.link(feature.properties['nvtablea_4'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_6'] !== null ? Autolinker.link(feature.properties['nvtablea_6'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact admin</th>\
+                        <td>' + (feature.properties['nvtablea_9'] !== null ? Autolinker.link(feature.properties['nvtablea_9'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num admin</th>\
+                        <td>' + (feature.properties['nvtablea10'] !== null ? Autolinker.link(feature.properties['nvtablea10'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax admin</th>\
+                        <td>' + (feature.properties['nvtablea11'] !== null ? Autolinker.link(feature.properties['nvtablea11'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact médecinh</th>\
+                        <td>' + (feature.properties['nvtablea12'] !== null ? Autolinker.link(feature.properties['nvtablea12'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num médecin</th>\
+                        <td>' + (feature.properties['nvtablea13'] !== null ? Autolinker.link(feature.properties['nvtablea13'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax médecin</th>\
+                        <td>' + (feature.properties['nvtablea14'] !== null ? Autolinker.link(feature.properties['nvtablea14'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MCOsanslitsdera_7_0() {
+            return {
+                pane: 'pane_MCOsanslitsdera_7',
+                radius: 4.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(249,29,49,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MCOsanslitsdera_7');
+        map.getPane('pane_MCOsanslitsdera_7').style.zIndex = 407;
+        map.getPane('pane_MCOsanslitsdera_7').style['mix-blend-mode'] = 'normal';
+        var layer_MCOsanslitsdera_7 = new L.geoJson(json_MCOsanslitsdera_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MCOsanslitsdera_7',
+            layerName: 'layer_MCOsanslitsdera_7',
+            pane: 'pane_MCOsanslitsdera_7',
+            onEachFeature: pop_MCOsanslitsdera_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_MCOsanslitsdera_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_MCOsanslitsdera_7);
+        map.addLayer(layer_MCOsanslitsdera_7);
+        function pop_MCOaveclitsdera_8(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Groupe hospitalier</th>\
+                        <td>' + (feature.properties['nvtablea_1'] !== null ? Autolinker.link(feature.properties['nvtablea_1'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_2'] !== null ? Autolinker.link(feature.properties['nvtablea_2'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Spécialité</th>\
+                        <td>' + (feature.properties['nvtablea_3'] !== null ? Autolinker.link(feature.properties['nvtablea_3'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Transferts sortants réalisés</th>\
+                        <td>' + (feature.properties['nvtablea_4'] !== null ? Autolinker.link(feature.properties['nvtablea_4'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea_6'] !== null ? Autolinker.link(feature.properties['nvtablea_6'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact admin</th>\
+                        <td>' + (feature.properties['nvtablea_9'] !== null ? Autolinker.link(feature.properties['nvtablea_9'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num admin</th>\
+                        <td>' + (feature.properties['nvtablea10'] !== null ? Autolinker.link(feature.properties['nvtablea10'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Mail/fax admin</th>\
+                        <td>' + (feature.properties['nvtablea11'] !== null ? Autolinker.link(feature.properties['nvtablea11'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Contact médecin</th>\
+                        <td>' + (feature.properties['nvtablea12'] !== null ? Autolinker.link(feature.properties['nvtablea12'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Num médecin</th>\
+                        <td>' + (feature.properties['nvtablea13'] !== null ? Autolinker.link(feature.properties['nvtablea13'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nvtablea14'] !== null ? Autolinker.link(feature.properties['nvtablea14'].toLocaleString(), {truncate: {length: 30, location: 'smart'}}) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MCOaveclitsdera_8_0() {
+            return {
+                pane: 'pane_MCOaveclitsdera_8',
+                shape: 'diamond',
+                radius: 5.999999999999998,
+                opacity: 1,
+                color: 'rgba(128,17,25,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(219,30,42,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_MCOaveclitsdera_8');
+        map.getPane('pane_MCOaveclitsdera_8').style.zIndex = 408;
+        map.getPane('pane_MCOaveclitsdera_8').style['mix-blend-mode'] = 'normal';
+        var layer_MCOaveclitsdera_8 = new L.geoJson(json_MCOaveclitsdera_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MCOaveclitsdera_8',
+            layerName: 'layer_MCOaveclitsdera_8',
+            pane: 'pane_MCOaveclitsdera_8',
+            onEachFeature: pop_MCOaveclitsdera_8,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_MCOaveclitsdera_8_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_MCOaveclitsdera_8);
+        map.addLayer(layer_MCOaveclitsdera_8);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>Centres hospitaliers en Ile-De-France</h2>';
+            };
+            title.addTo(map);
+            var abstract = new L.Control({'position':'bottomleft'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control leaflet-bar abstract');
+                this._div.id = 'abstract'
+                    this._div.setAttribute("onmouseenter", "abstract.show()");
+                    this._div.setAttribute("onmouseleave", "abstract.hide()");
+                    this.hide();
+                    return this._div;
+                };
+                abstract.hide = function () {
+                    this._div.classList.remove("abstractUncollapsed");
+                    this._div.classList.add("abstract");
+                    this._div.innerHTML = 'i'
+                }
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'Carte réalisée par Tanya Early et Alice El Khebir.<br />Précision sur les types de transferts:<br />+++ : + de 5 transferts sortants réalisés<br />++ : entre 3 et 5 transferts sortants réalisés<br />+ : entre 1 et 3 transferts sortants réalisés<br />(vide) : pas de transfert sortant réalisé';
+            };
+            abstract.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/MCOaveclitsdera_8.png" /> MCO avec lits de réa': layer_MCOaveclitsdera_8,'<img src="legend/MCOsanslitsdera_7.png" /> MCO sans lits de réa': layer_MCOsanslitsdera_7,'<img src="legend/SSRpasdelitsdera_6.png" /> SSR (pas de lits de réa)': layer_SSRpasdelitsdera_6,'<img src="legend/MCOSSRaveclitsdera_5.png" /> MCO/SSR avec lits de réa': layer_MCOSSRaveclitsdera_5,'<img src="legend/MCOSSRsanslitsdera_4.png" /> MCO/SSR sans lits de réa': layer_MCOSSRsanslitsdera_4,'<img src="legend/Htelhospitalierpasdelitsdera_3.png" /> Hôtel hospitalier (pas de lits de réa)': layer_Htelhospitalierpasdelitsdera_3,'<img src="legend/covid_2.png" /> covid+': layer_covid_2,'<img src="legend/DEPARTEMENT_1.png" /> DEPARTEMENT': layer_DEPARTEMENT_1,"OSM Standard": layer_OSMStandard_0,}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_covid_2,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'nvtablea_2'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        </script>
+    </body>
+</html>
